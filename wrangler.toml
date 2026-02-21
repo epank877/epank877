@@ -1,0 +1,7 @@
+name = "x-pro"
+main = "workers.js"  # atau lokasi file utama Anda
+compatibility_date = "2026-02-21"
+
+# Jika Anda menggunakan assets (file statis)
+# [site]
+# bucket = "./public"

@@ -1815,7 +1815,8 @@ const SIDEBAR_COMPONENT = `
     </div>
 `;
 
-
+const WS_READY_STATE2_OPEN = 1;
+const WS_READY_STATE2_CLOSING = 2;
 
 async function getProxyList(forceReload = false) {
   if (!cachedProxyList.length || forceReload) {
@@ -6765,7 +6766,7 @@ async function remoteSocketToWS(remoteSocket, webSocket, responseHeader, retry, 
         start() {},
         async write(chunk, controller) {
           hasIncomingData = true;
-          if (webSocket.readyState !== WS_READY_STATE_OPEN) {
+          if (webSocket.readyState !== WS_READY_STATE2_OPEN) {
             controller.error("webSocket.readyState is not open, maybe close");
           }
           if (header) {
@@ -6840,7 +6841,7 @@ async function handleUDPOutbound(webSocket, responseHeader, log) {
           const dnsQueryResult = await resp.arrayBuffer();
           const udpSize = dnsQueryResult.byteLength;
           const udpSizeBuffer = new Uint8Array([(udpSize >> 8) & 0xff, udpSize & 0xff]);
-          if (webSocket.readyState === WS_READY_STATE_OPEN) {
+          if (webSocket.readyState === WS_READY_STATE2_OPEN) {
             log(`doh success and dns message length is ${udpSize}`);
             if (isVlessHeaderSent) {
               webSocket.send(await new Blob([udpSizeBuffer, dnsQueryResult]).arrayBuffer());
@@ -6867,7 +6868,7 @@ async function handleUDPOutbound(webSocket, responseHeader, log) {
 
 function safeCloseWebSocket(socket) {
   try {
-    if (socket.readyState === WS_READY_STATE_OPEN || socket.readyState === WS_READY_STATE_CLOSING) {
+    if (socket.readyState === WS_READY_STATE2_OPEN || socket.readyState === WS_READY_STATE2_CLOSING) {
       socket.close();
     }
   } catch (error) {

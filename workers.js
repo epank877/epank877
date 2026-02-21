@@ -1815,8 +1815,7 @@ const SIDEBAR_COMPONENT = `
     </div>
 `;
 
-const WS_READY_STATE_OPEN = 1;
-const WS_READY_STATE_CLOSING = 2;
+
 
 async function getProxyList(forceReload = false) {
   if (!cachedProxyList.length || forceReload) {
